@@ -1,0 +1,53 @@
+#*******************************************************************************
+# Build system configuration file template.  Copy this to make.inc in this
+# directory and modify as needed.  The current configuration should work for a
+# standard GNU/Linux system with HDF4, HDF5, NetCDF, and Qt5 installed in
+# standard locations.
+#*******************************************************************************
+
+# C compiler and compiler flags.  These are for a standard GNU/Linux
+# distribution.
+CC       = gcc
+CCFLAGS  = -O2 -Wall -Werror -fPIC
+
+# C++ compiler and compiler flags.  These are for a standard GNU/Linux
+# distribution.
+CXX      = g++
+CXXFLAGS = -O2 -Wall -Werror -std=c++11 -fPIC
+
+# If your include files and libraries and are in non-standard locations
+# uncomment INCDIRS and LIBDIRS and set appropriately.
+
+# HDF4
+#INCDIRS += -I${HOME}/opt/hdf/include
+#LIBDIRS += -L${HOME}/opt/hdf/lib
+LINKS   += -lmfhdf -ldf -ljpeg -lz
+
+# HDF 5
+#INCDIRS += -I${HOME}/opt/hdf5/include
+#LIBDIRS += -L${HOME}/opt/hdf5/lib
+LINKS   += -lhdf5 -lhdf5_hl
+
+# NetCDF
+#INCDIRS += -I${HOME}/opt/netcdf/include
+#LIBDIRS += -L${HOME}/opt/netcdf/lib
+LINKS   += -lnetcdf
+
+# Uncomment either Qt4 or Qt5.  Qt5 is preferable and you probably have it but
+# there are some old systems that still do not have Qt5 installed and only Qt4. 
+
+# The name (with path if needed) of the Qt meta-object compiler.  First is for
+# Qt4 and the second is for Qt5.
+#MOC      = moc-qt4
+MOC      = moc-qt5
+
+# Qt 4
+#INCDIRS += -I/usr/include/qt4 -I/usr/include/qt4/Qt
+#LIBDIRS += -L/usr/lib
+#LINKS   += -lQtCore -lQtGui
+
+# Qt 5
+INCDIRS += -I/usr/include/qt5 -I/usr/include/qt5/QtCore \
+           -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtWidgets
+LIBDIRS += -L/usr/lib
+LINKS   += -lQt5Core -lQt5Gui -lQt5Widgets

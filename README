@@ -1,0 +1,81 @@
+XDFV - X (Network Common | Hierarchical 4 | Hierarchical 5) Data Format Viewer
+
+
+DESCRIPTION
+------------
+A slick NetCDF/HDF4/HDF5 contents viewer with developers in mind.
+
+
+INSTALLATION
+------------
+The source maybe obtained by git cloning from github.com with:
+
+git clone https://github.com/gmcgarragh/xdfv.git
+
+The main code is C/C++ and is dependent on the C++ standard library and the
+following external libraries:
+
+* Qt4 or Qt5
+* NetCDF
+* HDF4
+* HDF5
+
+The build system requires GNU Make, with which the following steps will compile
+the code:
+
+1) Copy make.inc.example to make.inc.
+2) Edit make.inc according to the comments within.
+3) Run make.
+
+The default setup in make.inc.example is for GCC and should work on any Linux
+or MacOS systems with programming tools installed and probably most modern UNIX
+systems.
+
+For other platforms/environments, such as MS Windows Visual C++, it is up to
+user to set up the build within that platform/environment.
+
+After the build the xdfv executable will be located in the same directory as
+the source.  It is up to the user to move it or link to it from other locations.
+
+
+USAGE
+-----
+
+xdfv [OPTIONS] [FILE 1 | FILE 2 | FILE 3 | ...]
+
+Any number of FILEs can be given on the command line to be put into different
+tabs.  xdfv will determine the file type either by file extension (.hdf, .h5,
+or .nc) or, in the case of HDF5 files, by asking the HDF5 library if a file is
+HDF5.  Note: Since NetCDF4 files are in fact HDF5 files with NetCDF metadata
+xdfv will first check for the .nc extension to determine if the file should be
+interpreted as a NetCDF file.  The options --hdf, --hdf5, and --netcdf can be
+used to force how xdfv should try to interpret the file.
+
+To get a full list of command line options execute xdfv with the --help option.
+
+
+DOCUMENTATION
+-------------
+
+The xdfv interface is simple and aims to be intuitive.  A couple of details
+worth mentioning:
+
+* Execute xdfv with the --help option to get a list of command line arguments.
+
+* For the table view, to view data in either one or two dimensions, the
+dimension range can be specified using standard array slicing syntax.  For
+example: 'i', 'i1:', ':i2', or 'i1:i2', where 'i' has a length of one and 'i1'
+and 'i2' are the inclusive beginning and end of a range and a blank side of the
+':' means the respective bound of the full range.  At most two dimensions can
+have a range of more than length one.
+
+
+CONTACT
+-------
+For questions, comments, or bug reports contact Greg McGarragh at
+greg.mcgarragh@colostate.edu.
+
+Bug reports are greatly appreciated!
+
+Contributions are also welcomed for which proper attribution will be given.
+Please send contributions in the form of a github pull request.
