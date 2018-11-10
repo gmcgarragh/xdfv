@@ -174,8 +174,6 @@ void XDFTabTreeView::changeFontSize(int delta)
 
 void XDFTabTreeView::increaseFontSize()
 {
-    font_size += 1;
-
     changeFontSize(+1);
 }
 
@@ -183,8 +181,6 @@ void XDFTabTreeView::increaseFontSize()
 
 void XDFTabTreeView::decreaseFontSize()
 {
-    font_size -= 1;
-
     changeFontSize(-1);
 }
 
