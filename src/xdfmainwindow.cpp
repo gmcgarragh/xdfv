@@ -36,6 +36,7 @@ XDFMainWindow::XDFMainWindow(QWidget *parent)
 
     QMenu *file_menu;
     QAction *open_file_action;
+    QAction *reload_file_action;
     QAction *quit_action;
 
     QMenu *edit_menu;
@@ -91,6 +92,10 @@ XDFMainWindow::XDFMainWindow(QWidget *parent)
     open_file_action = file_menu->addAction("Open file");
     open_file_action->setShortcut(QKeySequence("Ctrl+o"));
     QObject::connect(open_file_action, SIGNAL(triggered()), this, SLOT(openFile()));
+
+    reload_file_action = file_menu->addAction("Reload file");
+    reload_file_action->setShortcut(QKeySequence("Ctrl+r"));
+    QObject::connect(reload_file_action, SIGNAL(triggered()), this, SLOT(reloadCurrentFile()));
 
     quit_action = file_menu->addAction("Quit");
     quit_action->setShortcut(QKeySequence("Ctrl+q"));
@@ -282,14 +287,14 @@ char *XDFMainWindow::cut_fn(const char *in, char *out)
 
 
 
-XDFMainWindow::FileType XDFMainWindow::file_type_from_extension(QString file_name)
+XDFV::FileType XDFMainWindow::file_type_from_extension(QString file_name)
 {
     FILE *fp;
 
     QFileInfo fi(file_name);
 
     if (fi.suffix() == "nc")
-        return XDFMainWindow::NetCDF;
+        return XDFV::NetCDF;
 
     fp = fopen(file_name.toLatin1().data(), "r");
     if (fp == NULL)
@@ -297,15 +302,15 @@ XDFMainWindow::FileType XDFMainWindow::file_type_from_extension(QString file_nam
     fclose(fp);
 
     if (H5Fis_hdf5(file_name.toLatin1().data()) > 0)
-        return XDFMainWindow::HDF5;
+        return XDFV::HDF5;
 
     if (fi.suffix() == "h5")
-        return XDFMainWindow::HDF5;
+        return XDFV::HDF5;
 
     if (fi.suffix() == "hdf")
-        return XDFMainWindow::HDF4;
+        return XDFV::HDF4;
 
-    return XDFMainWindow::Unknown;
+    return XDFV::Unknown;
 }
 
 
@@ -315,13 +320,13 @@ void XDFMainWindow::openFile()
     QMessageBox messageBox;
     QStringList file_names;
 
-    XDFMainWindow::FileType file_type = XDFMainWindow::Unknown;
+    XDFV::FileType file_type = XDFV::Unknown;
 
     file_names = QFileDialog::getOpenFileNames(this, "", "", "(*.hdf *.h5 *.nc)");
 
     for (int i = 0; i < file_names.size(); ++i) {
         try {
-            if ((file_type = file_type_from_extension(file_names.at(i))) == XDFMainWindow::Unknown) {
+            if ((file_type = file_type_from_extension(file_names.at(i))) == XDFV::Unknown) {
                 messageBox.critical(this, "XDFV Error", "Unknown file extension.");
                 return;
             }
@@ -348,10 +353,10 @@ void XDFMainWindow::openFile()
 
 void XDFMainWindow::openFile(const char *file_name, int flag)
 {
-    XDFMainWindow::FileType file_type;
+    XDFV::FileType file_type;
 
     try {
-        if ((file_type = file_type_from_extension(file_name)) == XDFMainWindow::Unknown)
+        if ((file_type = file_type_from_extension(file_name)) == XDFV::Unknown)
             throw UnknownFileExtension;
     }
     catch (int e) {
@@ -367,7 +372,7 @@ void XDFMainWindow::openFile(const char *file_name, int flag)
 
 
 
-void XDFMainWindow::openFile(XDFMainWindow::FileType file_type, const char *file_name, int flag)
+void XDFMainWindow::openFile(XDFV::FileType file_type, const char *file_name, int flag)
 {
     char *temp;
 
@@ -376,11 +381,11 @@ void XDFMainWindow::openFile(XDFMainWindow::FileType file_type, const char *file
     XDFTreeView *xdf_tree_view = NULL;
 
     try {
-        if (file_type == XDFMainWindow::HDF4)
+        if (file_type == XDFV::HDF4)
             xdf_tree_view = new HDFTreeView(file_name, flag, tabTreeView());
-        else if (file_type == XDFMainWindow::HDF5)
+        else if (file_type == XDFV::HDF5)
             xdf_tree_view = new HDF5TreeView(file_name, tabTreeView());
-        else if (file_type == XDFMainWindow::NetCDF)
+        else if (file_type == XDFV::NetCDF)
             xdf_tree_view = new NCTreeView  (file_name, tabTreeView());
         else {
             fprintf(stderr, "ERROR: Unknown file type\n");
@@ -394,13 +399,27 @@ void XDFMainWindow::openFile(XDFMainWindow::FileType file_type, const char *file
             throw UnableToOpenFile;
     }
 
+    if (tabTreeView()->getDefaultExpanded())
+        xdf_tree_view->expandAll();
     xdf_tree_view->setFontSize(tabTreeView()->getFontSize());
-    xdf_tree_view->setColorized(tabTreeView()->isColorized());
+    xdf_tree_view->colorizeAll(tabTreeView()->isColorized());
 
     temp = (char *) malloc(LN * sizeof(char));
     index = tabTreeView()->addTab(xdf_tree_view, cut_fn(file_name, temp));
     tabTreeView()->setTabToolTip(index, file_name);
     free(temp);
+}
+
+
+
+void XDFMainWindow::reloadCurrentFile()
+{
+    XDFTreeView *view = (XDFTreeView *) (tabTreeView()->currentWidget());
+    view->clear();
+    view->load();
+    if (tabTreeView()->getDefaultExpanded())
+        view->expandAll();
+    view->colorizeAll(tabTreeView()->isColorized());
 }
 
 

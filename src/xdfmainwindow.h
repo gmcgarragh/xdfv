@@ -15,6 +15,7 @@
 #include <qsplitter.h>
 #include <qtabwidget.h>
 
+#include "xdfv.h"
 #include "xdftabtreeview.h"
 
 
@@ -23,13 +24,6 @@ class XDFMainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    enum FileType {
-        HDF4,
-        HDF5,
-        NetCDF,
-        Unknown
-    };
-
     enum ErrorCode {
         FileNotFound = 1,
         UnknownFileExtension,
@@ -46,7 +40,7 @@ private:
 
     char *cut_fn(const char *in, char *out);
 
-    FileType file_type_from_extension(QString file_name);
+    XDFV::FileType file_type_from_extension(QString file_name);
 
 public:
     XDFMainWindow(QWidget *parent = 0);
@@ -57,7 +51,8 @@ public:
 public slots:
     void openFile();
     void openFile(const char *file_name, int flag);
-    void openFile(XDFMainWindow::FileType file_type, const char *file_name, int flag);
+    void openFile(XDFV::FileType file_type, const char *file_name, int flag);
+    void reloadCurrentFile();
 
     void find();
     void findPrev();

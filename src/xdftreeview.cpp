@@ -53,9 +53,10 @@ void XDFTreeViewItem::setHasDataTable(bool has)
 
 
 
-XDFTreeView::XDFTreeView(QWidget *parent)
-    : QTreeWidget(parent)
+XDFTreeView::XDFTreeView(const char *file_name_, XDFV::FileType file_type, QWidget *parent)
+    : QTreeWidget(parent), file_type(file_type)
 {
+    file_name = strdup(file_name_);
 /*
     setAutoScroll(false);
 */
@@ -69,8 +70,30 @@ XDFTreeView::XDFTreeView(QWidget *parent)
 
 XDFTreeView::~XDFTreeView()
 {
+    free(file_name);
+}
+
+
+
+const char *XDFTreeView::filename()
+{
+    return file_name;
+}
+
+
+
+XDFV::FileType XDFTreeView::fileType()
+{
+    return file_type;
+}
+
+
+
+void XDFTreeView::load()
+{
 
 }
+
 
 
 void XDFTreeView::copyItemName()
@@ -252,34 +275,10 @@ void XDFTreeView::colorize(QTreeWidgetItem *item, bool color)
 
 void XDFTreeView::colorizeAll(bool color)
 {
-    int i;
+    QTreeWidgetItemIterator it(this);
 
-    for (i = 0; i < topLevelItemCount(); ++i) {
-        colorize(topLevelItem(i), color);
-        colorizeAll(topLevelItem(i), color);
+    while (*it) {
+        colorize(*it, color);
+        ++it;
     }
-}
-
-
-
-void XDFTreeView::colorizeAll(QTreeWidgetItem *item, bool color)
-{
-    int i;
-
-    for (i = 0; i < item->childCount(); ++i) {
-        colorize(item->child(i), color);
-        colorizeAll(item->child(i), color);
-    }
-}
-
-
-
-void XDFTreeView::setColorized(bool colorize)
-{
-    if (colorize == is_colorized)
-        return;
-
-    is_colorized = colorize;
-
-    XDFTreeView::colorizeAll(colorize);
 }

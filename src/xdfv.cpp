@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 
     XDFMainWindow *main_window;
 
-    XDFMainWindow::FileType file_types[MAX_FILES];
+    XDFV::FileType file_types[MAX_FILES];
 
 
     /*--------------------------------------------------------------------------
@@ -88,17 +88,17 @@ int main(int argc, char *argv[])
             }
             else if (strcmp(argv[i], "--hdf4") == 0) {
                 i_file++;
-                file_types[i_file] = XDFMainWindow::HDF4;
+                file_types[i_file] = XDFV::HDF4;
                 file_names[i_file] = argv[++i];
             }
             else if (strcmp(argv[i], "--hdf5") == 0) {
                 i_file++;
-                file_types[i_file] = XDFMainWindow::HDF5;
+                file_types[i_file] = XDFV::HDF5;
                 file_names[i_file] = argv[++i];
             }
             else if (strcmp(argv[i], "--netcdf") == 0) {
                 i_file++;
-                file_types[i_file] = XDFMainWindow::NetCDF;
+                file_types[i_file] = XDFV::NetCDF;
                 file_names[i_file] = argv[++i];
             }
             else if (strcmp(argv[i], "--help") == 0) {
@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
         }
         else {
             i_file++;
-            file_types[i_file] = XDFMainWindow::Unknown;
+            file_types[i_file] = XDFV::Unknown;
             file_names[i_file] = argv[i];
         }
     }
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
 
     for (i = 0; i < n_files; ++i) {
         try {
-            if (file_types[i] == XDFMainWindow::Unknown)
+            if (file_types[i] == XDFV::Unknown)
                 main_window->openFile(file_names[i], assume_sds[i]);
             else
                 main_window->openFile(file_types[i], file_names[i], assume_sds[i]);
@@ -175,8 +175,10 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (expand_all)
+    if (expand_all) {
         main_window->tabTreeView()->expandAllTabs();
+        main_window->tabTreeView()->setDefaultExpanded(true);
+    }
     if (collapse_all)
         main_window->tabTreeView()->collapseAllTabs();
     if (font_size > 0) {

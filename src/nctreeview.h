@@ -27,8 +27,6 @@ class NCTreeView : public XDFTreeView, NCProcessor
     Q_OBJECT
 
 private:
-    const char *file_name;
-
     int nc_id2;
 
     QColor file_color;
@@ -50,6 +48,8 @@ private:
 public:
     NCTreeView(const char *file_name, QWidget *parent = 0);
     ~NCTreeView();
+
+    void load();
 
 public slots:
     void showDataTable();

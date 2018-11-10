@@ -18,6 +18,8 @@ class XDFTabTreeView : public QTabWidget
     Q_OBJECT
 
 private:
+    bool default_expanded;
+
     int font_size;
     int default_font_size;
 
@@ -26,6 +28,8 @@ private:
 public:
     XDFTabTreeView(QWidget *parent = 0);
     ~XDFTabTreeView();
+
+    bool getDefaultExpanded();
 
     int getFontSize();
     int getDefaultFontSize();
@@ -42,11 +46,14 @@ public slots:
     void findPrev(QString &name);
     void selectAll(QString &name);
 
+    void setDefaultExpanded(bool expanded);
     void expandAll();
     void expandAllTabs();
     void collapseAll();
     void collapseAllTabs();
+
     void showDataTable();
+
     void closeCurrentTab();
     void closeCurrentTab(int index);
 
@@ -56,6 +63,7 @@ public slots:
     void changeFontSize(int delta);
     void increaseFontSize();
     void decreaseFontSize();
+
     void setColorized(bool colorize);
 };
 

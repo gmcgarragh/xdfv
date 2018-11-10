@@ -62,7 +62,16 @@ HDF5TreeViewItem::ItemType HDF5TreeViewItem::type()
 
 
 HDF5TreeView::HDF5TreeView(const char *file_name, QWidget *parent)
-    : XDFTreeView(parent), file_name(file_name)
+    : XDFTreeView(file_name, XDFV::HDF5, parent)
+{
+    file_id = -1;
+
+    load();
+}
+
+
+
+void HDF5TreeView::load()
 {
     char *temp;
 
@@ -97,19 +106,26 @@ HDF5TreeView::HDF5TreeView(const char *file_name, QWidget *parent)
     attr_color      = QColor(  0, 0,   224);
     dataspace_color = QColor(244, 0,   224);
 
-    snprintf(temp, LN, "%s - %s", program_name, file_name);
+    snprintf(temp, LN, "%s - %s", program_name, filename());
     setWindowTitle(temp);
 
-    item = new HDF5TreeViewItem(this, HDF5TreeViewItem::File, file_name);
-    item->setText(0, file_name);
+    item = new HDF5TreeViewItem(this, HDF5TreeViewItem::File, filename());
+    item->setText(0, filename());
 
-    status = procHDF5File(file_name, item);
+    if (file_id != -1) {
+        if (H5Fclose(file_id) < 0) {
+            fprintf(stderr, "ERROR: H5Fclose(), file_name = %s\n", filename());
+            exit(1);
+        }
+    }
+
+    status = procHDF5File(filename(), item);
     if (status != 0)
         throw status;
 
-    file_id = H5Fopen(file_name, H5F_ACC_RDONLY, H5P_DEFAULT);
+    file_id = H5Fopen(filename(), H5F_ACC_RDONLY, H5P_DEFAULT);
     if (file_id < 0) {
-        fprintf(stderr, "ERROR: H5Fopen(), file_name = %s\n", file_name);
+        fprintf(stderr, "ERROR: H5Fopen(), file_name = %s\n", filename());
         exit(1);
     }
 
@@ -121,7 +137,7 @@ HDF5TreeView::HDF5TreeView(const char *file_name, QWidget *parent)
 HDF5TreeView::~HDF5TreeView()
 {
     if (H5Fclose(file_id) < 0) {
-        fprintf(stderr, "ERROR: H5Fclose(), file_name = %s\n", file_name);
+        fprintf(stderr, "ERROR: H5Fclose(), file_name = %s\n", filename());
         exit(1);
     }
 }

@@ -27,8 +27,6 @@ class HDF5TreeView : public XDFTreeView, HDF5Processor
     Q_OBJECT
 
 private:
-    const char *file_name;
-
     hid_t file_id;
 
     QColor file_color;
@@ -51,6 +49,8 @@ private:
 public:
     HDF5TreeView(const char *file_name_, QWidget *parent = 0);
     ~HDF5TreeView();
+
+    void load();
 
 public slots:
     void showDataTable();

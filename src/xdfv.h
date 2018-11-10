@@ -32,4 +32,15 @@ typedef unsigned long long ulonglong;
 extern const char *program_name;
 extern const char *PROGRAM_NAME;
 
+
+namespace XDFV
+{
+    enum FileType {
+        HDF4,
+        HDF5,
+        NetCDF,
+        Unknown
+    };
+}
+
 #endif /* XDFV_H */

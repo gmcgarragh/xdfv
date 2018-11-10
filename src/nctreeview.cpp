@@ -63,7 +63,16 @@ NCTreeViewItem::ItemType NCTreeViewItem::type()
 
 
 NCTreeView::NCTreeView(const char *file_name, QWidget *parent)
-    : XDFTreeView(parent), file_name(file_name)
+    : XDFTreeView(file_name, XDFV::NetCDF, parent)
+{
+    nc_id2 = -1;
+
+    load();
+}
+
+
+
+void NCTreeView::load()
 {
     char *temp;
 
@@ -100,22 +109,31 @@ NCTreeView::NCTreeView(const char *file_name, QWidget *parent)
     dim_color  = QColor(224,   0, 224);
     attr_color = QColor(  0,   0, 224);
 
-    snprintf(temp, LN, "%s - %s", program_name, file_name);
+    snprintf(temp, LN, "%s - %s", program_name, filename());
     setWindowTitle(temp);
 
-    item = new NCTreeViewItem(this, NCTreeViewItem::File, file_name);
-    item->setText(0, file_name);
+    item = new NCTreeViewItem(this, NCTreeViewItem::File, filename());
+    item->setText(0, filename());
 
-    status = procNCFile(file_name, NULL, item);
+    if (nc_id2 != -1) {
+        status = nc_close(nc_id2);
+        if (status != NC_NOERR) {
+            fprintf(stderr, "ERROR: nc_close(), file_name = %s, %s\n",
+                    filename(), nc_strerror(status));
+            exit(1);
+        }
+    }
+
+    status = procNCFile(filename(), NULL, item);
     if (status != 0)
         throw status;
 
     header()->resizeSection(0, 350);
 
-    status = nc_open(file_name, NC_NOWRITE, &nc_id2);
+    status = nc_open(filename(), NC_NOWRITE, &nc_id2);
     if (status != NC_NOERR) {
         fprintf(stderr, "ERROR: nc_open(), file_name = %s, %s\n",
-                file_name, nc_strerror(status));
+                filename(), nc_strerror(status));
         exit(1);
     }
 
@@ -131,7 +149,7 @@ NCTreeView::~NCTreeView()
     status = nc_close(nc_id2);
     if (status != NC_NOERR) {
         fprintf(stderr, "ERROR: nc_close(), file_name = %s, %s\n",
-                file_name, nc_strerror(status));
+                filename(), nc_strerror(status));
         exit(1);
     }
 }

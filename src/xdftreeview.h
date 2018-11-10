@@ -13,6 +13,8 @@
 #include <qstandarditemmodel.h>
 #include <qtreewidget.h>
 
+#include "xdfv.h"
+
 
 class XDFTreeViewItem;
 
@@ -24,50 +26,41 @@ class XDFTreeView : public QTreeWidget
     QStandardItemModel *model;
 
 private:
-    bool is_colorized;
+    char *file_name;
+    XDFV::FileType file_type;
 
     void mousePressEvent(QMouseEvent *event);
-
-    void colorizeAll(bool color);
-    void colorizeAll(QTreeWidgetItem *item, bool color);
 
 protected:
     virtual void colorize(QTreeWidgetItem *item, bool color);
 
 public:
-    XDFTreeView(QWidget *parent = 0);
+    XDFTreeView(const char *file_name, XDFV::FileType file_type, QWidget *parent = 0);
     ~XDFTreeView();
+
+    const char *filename();
+    XDFV::FileType fileType();
+
+    virtual void load();
 
 public slots:
     void copyItemName();
     void copyItemName(XDFTreeViewItem *item, int column);
 
     void find(QString &name);
-/*
-    void find(QTreeWidgetItem *item, QString &name);
-*/
     void findPrev(QString &name);
-
     void selectAll(QString &name);
-/*
-    bool selectAll(QTreeWidgetItem *item, QString &name, bool flag);
-*/
+
     void expandAll();
-/*
-    void expandAll(QTreeWidgetItem *item);
-*/
     void collapseAll();
-/*
-    void collapseAll(QTreeWidgetItem *item);
-*/
+    void colorizeAll(bool color);
+
     void prepareMenu(const QPoint &pos);
     virtual void showDataTable();
     virtual void showDataTable(XDFTreeViewItem *item, int column);
 
     void setFontSize(int size);
     void changeFontSize(int delta);
-
-    void setColorized(bool colorize);
 };
 
 

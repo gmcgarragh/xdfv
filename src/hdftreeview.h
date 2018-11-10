@@ -29,9 +29,9 @@ class HDFTreeView : public XDFTreeView, HDFProcessor
     Q_OBJECT
 
 private:
-    const char *file_name;
-
     int sd_id;
+
+    int load_flag;
 
     QColor file_color;
     QColor v_color;
@@ -58,6 +58,8 @@ private:
 public:
     HDFTreeView(const char *file_name, int sds, QWidget *parent = 0);
     ~HDFTreeView();
+
+    void load();
 
 public slots:
     void showDataTable();

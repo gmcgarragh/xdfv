@@ -13,7 +13,7 @@
 
 
 XDFTabTreeView::XDFTabTreeView(QWidget *parent)
-    : QTabWidget(parent), is_colorized(false)
+    : QTabWidget(parent), default_expanded(false), is_colorized(false)
 {
     setTabsClosable(true);
 /*
@@ -64,6 +64,20 @@ void XDFTabTreeView::selectAll(QString &name)
 {
     if (count() > 0)
         ((XDFTreeView *) currentWidget())->selectAll(name);
+}
+
+
+
+void XDFTabTreeView::setDefaultExpanded(bool expanded)
+{
+     default_expanded = expanded;
+}
+
+
+
+bool XDFTabTreeView::getDefaultExpanded()
+{
+     return default_expanded;
 }
 
 
@@ -157,6 +171,7 @@ void XDFTabTreeView::changeFontSize(int delta)
 }
 
 
+
 void XDFTabTreeView::increaseFontSize()
 {
     font_size += 1;
@@ -207,10 +222,13 @@ void XDFTabTreeView::setColorized(bool colorize)
 {
     int i;
 
+    if (colorize == is_colorized)
+        return;
+
     is_colorized = colorize;
 
     for (i = 0; i < count(); ++i)
-        ((XDFTreeView *) widget(i))->setColorized(colorize);
+        ((XDFTreeView *) widget(i))->colorizeAll(colorize);
 
     emit(colorizedChanged(colorize));
 }
