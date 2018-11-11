@@ -10,6 +10,7 @@
 #ifndef XDFMAINWINDOW_H
 #define XDFMAINWINDOW_H
 
+#include <qfilesystemwatcher.h>
 #include <qlineedit.h>
 #include <qmainwindow.h>
 #include <qsplitter.h>
@@ -17,6 +18,7 @@
 
 #include "xdfv.h"
 #include "xdftabtreeview.h"
+#include "xdftreeview.h"
 
 
 class XDFMainWindow : public QMainWindow
@@ -35,6 +37,7 @@ private:
 
     QFrame *find_frame;
     QLineEdit *find_line_edit;
+    QFileSystemWatcher *file_watcher;
 
     XDFTabTreeView *tab_tree_view;
 
@@ -52,6 +55,8 @@ public slots:
     void openFile();
     void openFile(const char *file_name, int flag);
     void openFile(XDFV::FileType file_type, const char *file_name, int flag);
+    void reloadFile(XDFTreeView *view);
+    void reloadFile(const QString &file_name);
     void reloadCurrentFile();
 
     void find();

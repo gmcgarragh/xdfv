@@ -91,15 +91,12 @@ XDFMainWindow::XDFMainWindow(QWidget *parent)
 
     open_file_action = file_menu->addAction("Open file");
     open_file_action->setShortcut(QKeySequence("Ctrl+o"));
-    QObject::connect(open_file_action, SIGNAL(triggered()), this, SLOT(openFile()));
 
     reload_file_action = file_menu->addAction("Reload file");
     reload_file_action->setShortcut(QKeySequence("Ctrl+r"));
-    QObject::connect(reload_file_action, SIGNAL(triggered()), this, SLOT(reloadCurrentFile()));
 
     quit_action = file_menu->addAction("Quit");
     quit_action->setShortcut(QKeySequence("Ctrl+q"));
-    QObject::connect(quit_action, SIGNAL(triggered()), this, SLOT(close()));
 
     /* Edit menu */
 
@@ -181,7 +178,6 @@ XDFMainWindow::XDFMainWindow(QWidget *parent)
     help_menu->setTitle("Help");
 
     about_action = help_menu->addAction("About " + QString(PROGRAM_NAME));
-    QObject::connect(about_action, SIGNAL(triggered()), this, SLOT(showAbout()));
 
 
     menu_bar->addMenu(file_menu);
@@ -224,6 +220,13 @@ XDFMainWindow::XDFMainWindow(QWidget *parent)
 
     find_horiz_layout->addWidget(find_close_push_button);
 
+/*
+    file_watcher = new QFileSystemWatcher(this);
+*/
+
+    QObject::connect(open_file_action,          SIGNAL(triggered()),   this,          SLOT(openFile()));
+    QObject::connect(reload_file_action,        SIGNAL(triggered()),   this,          SLOT(reloadCurrentFile()));
+    QObject::connect(quit_action,               SIGNAL(triggered()),   this,          SLOT(close()));
 
     QObject::connect(copy_item_name_action,     SIGNAL(triggered()),   tab_tree_view, SLOT(copyItemName()));
 
@@ -247,6 +250,11 @@ XDFMainWindow::XDFMainWindow(QWidget *parent)
     QObject::connect(default_font_size_action,  SIGNAL(triggered()),   tab_tree_view, SLOT(useDefaultFontSize()));
     QObject::connect(view_in_color_action,      SIGNAL(toggled(bool)), tab_tree_view, SLOT(setColorized(bool)));
     QObject::connect(tab_tree_view,             SIGNAL(colorizedChanged(bool)), view_in_color_action, SLOT(setChecked(bool)));
+
+    QObject::connect(about_action,              SIGNAL(triggered()),   this,          SLOT(showAbout()));
+/*
+    QObject::connect(file_watcher,              SIGNAL(fileChanged(const QString &)), this, SLOT(reloadFile(const QString &)));
+*/
 }
 
 
@@ -408,14 +416,17 @@ void XDFMainWindow::openFile(XDFV::FileType file_type, const char *file_name, in
     index = tabTreeView()->addTab(xdf_tree_view, cut_fn(file_name, temp));
     tabTreeView()->setTabToolTip(index, file_name);
     free(temp);
+/*
+    file_watcher->addPath(file_name);
+*/
 }
 
 
 
-void XDFMainWindow::reloadCurrentFile()
+void XDFMainWindow::reloadFile(XDFTreeView *view)
 {
-    XDFTreeView *view = (XDFTreeView *) (tabTreeView()->currentWidget());
     view->clear();
+
     try {
         view->load();
     }
@@ -425,9 +436,32 @@ void XDFMainWindow::reloadCurrentFile()
         else if (e == XDFProcessor::UnableToOpenFile)
             throw UnableToOpenFile;
     }
+
     if (tabTreeView()->getDefaultExpanded())
         view->expandAll();
     view->colorizeAll(tabTreeView()->isColorized());
+}
+
+
+
+void XDFMainWindow::reloadFile(const QString &file_name)
+{
+    int i;
+
+    XDFTreeView *view;
+
+    for (i = 0; i < tabTreeView()->count(); ++i) {
+         view = (XDFTreeView *) (tabTreeView()->widget(i));
+         if (file_name == QString(view->filename()))
+             reloadFile(view);
+    }
+}
+
+
+
+void XDFMainWindow::reloadCurrentFile()
+{
+    reloadFile((XDFTreeView *) (tabTreeView()->currentWidget()));
 }
 
 
