@@ -171,6 +171,8 @@ int main(int argc, char *argv[])
         }
     }
 
+    main_window->tabTreeView()->setCurrentIndex(0);
+
     if (expand_all) {
         main_window->tabTreeView()->expandAllTabs();
         main_window->tabTreeView()->setDefaultExpanded(true);
