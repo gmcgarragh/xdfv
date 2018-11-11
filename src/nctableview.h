@@ -20,11 +20,11 @@ class NCTableView : public XDFTableView
     Q_OBJECT
 
 private:
-    int nc_id;
+    const char *file_name;
     const char *var_name;
 
 public:
-    NCTableView(int nc_id_, const char *var_name_, QWidget *parent = 0);
+    NCTableView(const char *file_name, const char *var_name, QWidget *parent = 0);
     ~NCTableView();
 
 public slots:

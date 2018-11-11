@@ -27,8 +27,6 @@ class NCTreeView : public XDFTreeView, NCProcessor
     Q_OBJECT
 
 private:
-    int nc_id2;
-
     QColor file_color;
     QColor var_color;
     QColor dim_color;

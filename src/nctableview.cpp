@@ -15,13 +15,14 @@
 #include "nctableview.h"
 
 
-NCTableView::NCTableView(int nc_id, const char *var_name, QWidget *parent)
-     : XDFTableView(parent), nc_id(nc_id), var_name(var_name)
+NCTableView::NCTableView(const char *file_name, const char *var_name, QWidget *parent)
+     : XDFTableView(parent), file_name(file_name), var_name(var_name)
 {
     char temp[NC_MAX_NAME];
 
     int status;
 
+    int nc_id;
     int var_id;
 
     int n_dims;
@@ -30,6 +31,13 @@ NCTableView::NCTableView(int nc_id, const char *var_name, QWidget *parent)
     int n_atts;
 
     nc_type xtype;
+
+    status = nc_open(file_name, NC_NOWRITE, &nc_id);
+    if (status != NC_NOERR) {
+        fprintf(stderr, "ERROR: nc_open(), file_name = %s, %s\n",
+                file_name, nc_strerror(status));
+        exit(1);
+    }
 
     status = nc_inq_varid(nc_id, var_name, &var_id);
     if (status != NC_NOERR) {
@@ -42,6 +50,13 @@ NCTableView::NCTableView(int nc_id, const char *var_name, QWidget *parent)
     if (status != NC_NOERR) {
         fprintf(stderr, "ERROR: nc_inq_var(), varname = %s, %s\n",
                 var_name, nc_strerror(status));
+        exit(1);
+    }
+
+    status = nc_close(nc_id);
+    if (status != NC_NOERR) {
+        fprintf(stderr, "ERROR: nc_close(), file_name = %s, %s\n",
+                file_name, nc_strerror(status));
         exit(1);
     }
 
@@ -73,6 +88,7 @@ void NCTableView::refreshTable()
 
     int status;
 
+    int nc_id;
     int var_id;
 
     int n_dims;
@@ -96,6 +112,13 @@ void NCTableView::refreshTable()
     nc_type xtype;
 
     temp = (char *) malloc(LN * sizeof(char));
+
+    status = nc_open(file_name, NC_NOWRITE, &nc_id);
+    if (status != NC_NOERR) {
+        fprintf(stderr, "ERROR: nc_open(), file_name = %s, %s\n",
+                file_name, nc_strerror(status));
+        exit(1);
+    }
 
     status = nc_inq_varid(nc_id, var_name, &var_id);
     if (status != NC_NOERR) {
@@ -148,6 +171,13 @@ void NCTableView::refreshTable()
         }
 
         free(data);
+    }
+
+    status = nc_close(nc_id);
+    if (status != NC_NOERR) {
+        fprintf(stderr, "ERROR: nc_close(), file_name = %s, %s\n",
+                file_name, nc_strerror(status));
+        exit(1);
     }
 
     free(temp);

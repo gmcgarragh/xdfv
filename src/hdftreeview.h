@@ -29,8 +29,6 @@ class HDFTreeView : public XDFTreeView, HDFProcessor
     Q_OBJECT
 
 private:
-    int sd_id;
-
     int load_flag;
 
     QColor file_color;

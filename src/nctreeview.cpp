@@ -65,8 +65,9 @@ NCTreeViewItem::ItemType NCTreeViewItem::type()
 NCTreeView::NCTreeView(const char *file_name, QWidget *parent)
     : XDFTreeView(file_name, XDFV::NetCDF, parent)
 {
+/*
     nc_id2 = -1;
-
+*/
     load();
 }
 
@@ -115,27 +116,11 @@ void NCTreeView::load()
     item = new NCTreeViewItem(this, NCTreeViewItem::File, filename());
     item->setText(0, filename());
 
-    if (nc_id2 != -1) {
-        status = nc_close(nc_id2);
-        if (status != NC_NOERR) {
-            fprintf(stderr, "ERROR: nc_close(), file_name = %s, %s\n",
-                    filename(), nc_strerror(status));
-            exit(1);
-        }
-    }
-
     status = procNCFile(filename(), NULL, item);
     if (status != 0)
         throw status;
 
     header()->resizeSection(0, 350);
-
-    status = nc_open(filename(), NC_NOWRITE, &nc_id2);
-    if (status != NC_NOERR) {
-        fprintf(stderr, "ERROR: nc_open(), file_name = %s, %s\n",
-                filename(), nc_strerror(status));
-        exit(1);
-    }
 
     free(temp);
 }
@@ -144,14 +129,7 @@ void NCTreeView::load()
 
 NCTreeView::~NCTreeView()
 {
-    int status;
 
-    status = nc_close(nc_id2);
-    if (status != NC_NOERR) {
-        fprintf(stderr, "ERROR: nc_close(), file_name = %s, %s\n",
-                filename(), nc_strerror(status));
-        exit(1);
-    }
 }
 
 
@@ -481,7 +459,7 @@ void NCTreeView::showDataTable(NCTreeViewItem *item, int column)
     if (item->type() != NCTreeViewItem::Variable)
         return;
 
-    NCTableView *t = new NCTableView(nc_id2, item->name, 0);
+    NCTableView *t = new NCTableView(filename(), item->name, 0);
     t->setAttribute(Qt::WA_QuitOnClose, false);
     t->setAttribute(Qt::WA_DeleteOnClose, true);
     t->show();

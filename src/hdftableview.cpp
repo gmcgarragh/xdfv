@@ -13,9 +13,10 @@
 #include "hdftableview.h"
 
 
-HDFTableView::HDFTableView(int32 sd_id, const char *sds_name, QWidget *parent)
-    : XDFTableView(parent), sd_id(sd_id), sds_name(sds_name)
+HDFTableView::HDFTableView(const char *file_name, const char *sds_name, QWidget *parent)
+    : XDFTableView(parent), file_name(file_name), sds_name(sds_name)
 {
+    int32 sd_id;
     int32 sds_index;
     int32 sds_id;
 
@@ -24,6 +25,12 @@ HDFTableView::HDFTableView(int32 sd_id, const char *sds_name, QWidget *parent)
 
     int32 data_type;
     int32 num_attrs;
+
+    sd_id = SDstart(file_name, DFACC_READ);
+    if (sd_id == FAIL) {
+        fprintf(stderr, "ERROR: SDstart(), file_name = %s\n", file_name);
+        exit(1);
+    }
 
     sds_index = SDnametoindex(sd_id, sds_name);
     if (sds_index == FAIL) {
@@ -44,6 +51,11 @@ HDFTableView::HDFTableView(int32 sd_id, const char *sds_name, QWidget *parent)
 
     if (SDendaccess(sds_id) == FAIL) {
         fprintf(stderr, "ERROR: SDgetinfo(), sds_name = %s\n", sds_name);
+        exit(1);
+    }
+
+    if (SDend(sd_id) == FAIL) {
+        fprintf(stderr, "ERROR: SDend(), file_name = %s\n", file_name);
         exit(1);
     }
 
@@ -115,6 +127,7 @@ void HDFTableView::refreshTable()
     void *data;
     void *ptr;
 
+    int32 sd_id;
     int32 sds_index;
     int32 sds_id;
 
@@ -130,6 +143,12 @@ void HDFTableView::refreshTable()
     int32 length;
 
     temp = (char *) malloc(LN * sizeof(char));
+
+    sd_id = SDstart(file_name, DFACC_READ);
+    if (sd_id == FAIL) {
+        fprintf(stderr, "ERROR: SDstart(), file_name = %s\n", file_name);
+        exit(1);
+    }
 
     sds_index = SDnametoindex(sd_id, sds_name);
     if (sds_index == FAIL) {
@@ -181,6 +200,11 @@ void HDFTableView::refreshTable()
 
     if (SDendaccess(sds_id) == FAIL) {
         fprintf(stderr, "ERROR: SDgetinfo(), sds_name = %s\n", sds_name);
+        exit(1);
+    }
+
+    if (SDend(sd_id) == FAIL) {
+        fprintf(stderr, "ERROR: SDend(), file_name = %s\n", file_name);
         exit(1);
     }
 

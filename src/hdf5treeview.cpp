@@ -64,8 +64,6 @@ HDF5TreeViewItem::ItemType HDF5TreeViewItem::type()
 HDF5TreeView::HDF5TreeView(const char *file_name, QWidget *parent)
     : XDFTreeView(file_name, XDFV::HDF5, parent)
 {
-    file_id = -1;
-
     load();
 }
 
@@ -112,22 +110,9 @@ void HDF5TreeView::load()
     item = new HDF5TreeViewItem(this, HDF5TreeViewItem::File, filename());
     item->setText(0, filename());
 
-    if (file_id != -1) {
-        if (H5Fclose(file_id) < 0) {
-            fprintf(stderr, "ERROR: H5Fclose(), file_name = %s\n", filename());
-            exit(1);
-        }
-    }
-
     status = procHDF5File(filename(), item);
     if (status != 0)
         throw status;
-
-    file_id = H5Fopen(filename(), H5F_ACC_RDONLY, H5P_DEFAULT);
-    if (file_id < 0) {
-        fprintf(stderr, "ERROR: H5Fopen(), file_name = %s\n", filename());
-        exit(1);
-    }
 
     free(temp);
 }
@@ -136,10 +121,7 @@ void HDF5TreeView::load()
 
 HDF5TreeView::~HDF5TreeView()
 {
-    if (H5Fclose(file_id) < 0) {
-        fprintf(stderr, "ERROR: H5Fclose(), file_name = %s\n", filename());
-        exit(1);
-    }
+
 }
 
 
@@ -544,7 +526,7 @@ void HDF5TreeView::showDataTable(HDF5TreeViewItem *item, int column)
     if (item->type() != HDF5TreeViewItem::Dataset)
         return;
 
-    HDF5TableView *t = new HDF5TableView(file_id, item->name, 0);
+    HDF5TableView *t = new HDF5TableView(filename(), item->name, 0);
     t->setAttribute(Qt::WA_QuitOnClose, false);
     t->setAttribute(Qt::WA_DeleteOnClose, true);
     t->show();

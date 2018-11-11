@@ -13,16 +13,21 @@
 #include "hdf5tableview.h"
 
 
-HDF5TableView::HDF5TableView(hid_t file_id, const char *dataset_name_,
+HDF5TableView::HDF5TableView(const char *file_name, const char *dataset_name,
                              QWidget *parent)
-    : XDFTableView(parent), file_id(file_id)
+    : XDFTableView(parent), file_name(file_name), dataset_name(dataset_name)
 {
     int n_dims;
 
+    hid_t file_id;
     hid_t dataset_id;
     hid_t dataspace_id;
 
-    dataset_name = dataset_name_;
+    file_id = H5Fopen(file_name, H5F_ACC_RDONLY, H5P_DEFAULT);
+    if (file_id < 0) {
+        fprintf(stderr, "ERROR: H5Fopen(), file_name = %s\n", file_name);
+        exit(1);
+    }
 
     dataset_id = H5Dopen(file_id, dataset_name, H5P_DEFAULT);
     if (dataset_id < 0) {
@@ -49,6 +54,11 @@ HDF5TableView::HDF5TableView(hid_t file_id, const char *dataset_name_,
 
     if (H5Dclose(dataset_id) < 0) {
         fprintf(stderr, "ERROR: H5Dclose(), dataset_name = %s\n", dataset_name);
+        exit(1);
+    }
+
+    if (H5Fclose(file_id) < 0) {
+        fprintf(stderr, "ERROR: H5Fclose(), file_name = %s\n", file_name);
         exit(1);
     }
 
@@ -122,6 +132,7 @@ void HDF5TableView::refreshTable()
     void *data;
     void *ptr;
 
+    hid_t file_id;
     hid_t dataset_id;
     hid_t datatype_id;
     hid_t filespace_id;
@@ -136,6 +147,12 @@ void HDF5TableView::refreshTable()
     H5T_class_t data_class;
 
     temp = (char *) malloc(LN * sizeof(char));
+
+    file_id = H5Fopen(file_name, H5F_ACC_RDONLY, H5P_DEFAULT);
+    if (file_id < 0) {
+        fprintf(stderr, "ERROR: H5Fopen(), file_name = %s\n", file_name);
+        exit(1);
+    }
 
     dataset_id = H5Dopen(file_id, dataset_name, H5P_DEFAULT);
     if (dataset_id < 0) {
@@ -237,6 +254,11 @@ void HDF5TableView::refreshTable()
 
     if (H5Dclose(dataset_id) < 0) {
         fprintf(stderr, "ERROR: H5Dclose(), dataset_name = %s\n", dataset_name);
+        exit(1);
+    }
+
+    if (H5Fclose(file_id) < 0) {
+        fprintf(stderr, "ERROR: H5Fclose(), file_name = %s\n", file_name);
         exit(1);
     }
 

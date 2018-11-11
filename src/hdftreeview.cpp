@@ -76,8 +76,6 @@ HDFTreeViewItem::ItemType HDFTreeViewItem::type()
 HDFTreeView::HDFTreeView(const char *file_name, int sds, QWidget *parent)
     : XDFTreeView(file_name, XDFV::HDF4, parent)
 {
-    sd_id = -1;
-
     load_flag = sds;
 
     load();
@@ -147,24 +145,11 @@ void HDFTreeView::load()
     item = new HDFTreeViewItem(this, HDFTreeViewItem::File, filename());
     item->setText(0, filename());
 
-    if (sd_id != -1) {
-        if (SDend(sd_id) == FAIL) {
-            fprintf(stderr, "ERROR: SDend(), file_name = %s\n", filename());
-            exit(1);
-        }
-    }
-
     status = procHDFFile(filename(), NULL, item, load_flag);
     if (status != 0)
         throw status;
 
     header()->resizeSection(0, 350);
-
-    sd_id = SDstart(filename(), DFACC_READ);
-    if (sd_id == FAIL) {
-        fprintf(stderr, "ERROR: SDstart(), file_name = %s\n", filename());
-        exit(1);
-    }
 
     free(temp);
 }
@@ -173,10 +158,7 @@ void HDFTreeView::load()
 
 HDFTreeView::~HDFTreeView()
 {
-    if (SDend(sd_id) == FAIL) {
-        fprintf(stderr, "ERROR: SDend(), file_name = %s\n", filename());
-        exit(1);
-    }
+
 }
 
 
@@ -718,7 +700,7 @@ void HDFTreeView::showDataTable(HDFTreeViewItem *item, int column)
     if (item->type() != HDFTreeViewItem::Dataset)
         return;
 
-    HDFTableView *t = new HDFTableView(sd_id, item->name, 0);
+    HDFTableView *t = new HDFTableView(filename(), item->name, 0);
 
     t->setAttribute(Qt::WA_QuitOnClose, false);
     t->setAttribute(Qt::WA_DeleteOnClose, true);

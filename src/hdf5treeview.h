@@ -27,8 +27,6 @@ class HDF5TreeView : public XDFTreeView, HDF5Processor
     Q_OBJECT
 
 private:
-    hid_t file_id;
-
     QColor file_color;
     QColor group_color;
     QColor dataset_color;

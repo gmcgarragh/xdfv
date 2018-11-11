@@ -22,7 +22,7 @@ class HDFTableView : public XDFTableView
     Q_OBJECT
 
 private:
-    int32 sd_id;
+    const char *file_name;
     const char *sds_name;
 
     int parseSlice(int32 n_dims, const int32 *dims,
@@ -30,7 +30,7 @@ private:
                    int32 *offset, int32 *count, int32 *length);
 
 public:
-    HDFTableView(int32 sd_id, const char *sds_name, QWidget *parent = 0);
+    HDFTableView(const char *file_name, const char *sds_name, QWidget *parent = 0);
     ~HDFTableView();
 
 public slots:
