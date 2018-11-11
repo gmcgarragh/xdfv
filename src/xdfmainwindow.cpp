@@ -414,6 +414,7 @@ void XDFMainWindow::openFile(XDFV::FileType file_type, const char *file_name, in
 
     temp = (char *) malloc(LN * sizeof(char));
     index = tabTreeView()->addTab(xdf_tree_view, cut_fn(file_name, temp));
+    tabTreeView()->setCurrentIndex(index);
     tabTreeView()->setTabToolTip(index, file_name);
     free(temp);
 /*
