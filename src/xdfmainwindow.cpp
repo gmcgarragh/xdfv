@@ -95,6 +95,8 @@ XDFMainWindow::XDFMainWindow(QWidget *parent)
     reload_file_action = file_menu->addAction("Reload file");
     reload_file_action->setShortcut(QKeySequence("Ctrl+r"));
 
+    file_menu->addSeparator();
+
     quit_action = file_menu->addAction("Quit");
     quit_action->setShortcut(QKeySequence("Ctrl+q"));
 
