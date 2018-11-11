@@ -75,7 +75,7 @@ void XDFTabTreeView::setDefaultExpanded(bool expanded)
 
 
 
-bool XDFTabTreeView::getDefaultExpanded()
+bool XDFTabTreeView::defaultExpanded()
 {
      return default_expanded;
 }
@@ -153,7 +153,7 @@ void XDFTabTreeView::setFontSize(int size)
 
 
 
-int XDFTabTreeView::getFontSize()
+int XDFTabTreeView::fontSize()
 {
     return font_size;
 }
@@ -186,7 +186,7 @@ void XDFTabTreeView::decreaseFontSize()
 
 
 
-int XDFTabTreeView::getDefaultFontSize()
+int XDFTabTreeView::defaultFontSize()
 {
     return default_font_size;
 }

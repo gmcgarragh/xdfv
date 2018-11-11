@@ -407,9 +407,9 @@ void XDFMainWindow::openFile(XDFV::FileType file_type, const char *file_name, in
             throw UnableToOpenFile;
     }
 
-    if (tabTreeView()->getDefaultExpanded())
+    if (tabTreeView()->defaultExpanded())
         xdf_tree_view->expandAll();
-    xdf_tree_view->setFontSize(tabTreeView()->getFontSize());
+    xdf_tree_view->setFontSize(tabTreeView()->fontSize());
     xdf_tree_view->colorizeAll(tabTreeView()->isColorized());
 
     temp = (char *) malloc(LN * sizeof(char));
@@ -437,7 +437,7 @@ void XDFMainWindow::reloadFile(XDFTreeView *view)
             throw UnableToOpenFile;
     }
 
-    if (tabTreeView()->getDefaultExpanded())
+    if (tabTreeView()->defaultExpanded())
         view->expandAll();
     view->colorizeAll(tabTreeView()->isColorized());
 }

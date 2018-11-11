@@ -29,10 +29,10 @@ public:
     XDFTabTreeView(QWidget *parent = 0);
     ~XDFTabTreeView();
 
-    bool getDefaultExpanded();
+    bool defaultExpanded();
 
-    int getFontSize();
-    int getDefaultFontSize();
+    int fontSize();
+    int defaultFontSize();
 
     bool isColorized();
 

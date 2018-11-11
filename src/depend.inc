@@ -17,4 +17,5 @@ xdftableview.o: xdftableview.cpp xdfv.h xdftableview.h
 xdftabtreeview.o: xdftabtreeview.cpp xdfv.h xdftabtreeview.h \
  xdftreeview.h
 xdftreeview.o: xdftreeview.cpp xdfv.h xdftreeview.h
-xdfv.o: xdfv.cpp version.h xdfv.h xdfmainwindow.h xdftabtreeview.h
+xdfv.o: xdfv.cpp version.h xdfv.h xdfmainwindow.h xdftabtreeview.h \
+ xdftreeview.h
