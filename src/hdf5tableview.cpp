@@ -80,8 +80,6 @@ int HDF5TableView::parseSlice(int n_dims, const hsize_t *dims,
                               int *i_row, int *n_rows, int *i_col, int *n_cols,
                               hsize_t *offset, hsize_t *count, hsize_t *length)
 {
-    int i;
-
     int r = 0;
 
     size_t *dims_   = (size_t *) malloc(n_dims * sizeof(size_t));
@@ -89,12 +87,12 @@ int HDF5TableView::parseSlice(int n_dims, const hsize_t *dims,
     size_t *count_  = (size_t *) malloc(n_dims * sizeof(size_t));
     size_t length_;
 
-    for (i = 0; i < n_dims; ++i)
+    for (int i = 0; i < n_dims; ++i)
         dims_[i] = dims[i];
 
     if (! XDFTableView::parseSlice(n_dims, dims_, i_row, n_rows, i_col, n_cols,
                                    offset_, count_, &length_)) {
-        for (i = 0; i < n_dims; ++i) {
+        for (int i = 0; i < n_dims; ++i) {
             offset[i] = offset_[i];
             count [i] = count_ [i];
         }
@@ -116,9 +114,6 @@ int HDF5TableView::parseSlice(int n_dims, const hsize_t *dims,
 void HDF5TableView::refreshTable()
 {
     char *temp;
-
-    int i;
-    int j;
 
     int i_row;
     int n_rows;
@@ -224,8 +219,8 @@ void HDF5TableView::refreshTable()
 
         configureTable(i_row, n_rows, i_col, n_cols);
 
-        for (i = 0; i < n_rows; ++i) {
-            for (j = 0; j < n_cols; ++j) {
+        for (int i = 0; i < n_rows; ++i) {
+            for (int j = 0; j < n_cols; ++j) {
                 ptr = ((char *) data) + (i * n_cols + j) * data_size;
                 hdf5_scaler_to_string(datatype_id, data_class, data_size, ptr, 0, temp, LN);
                 tableWidget()->setItem(i, j, new QTableWidgetItem(temp));

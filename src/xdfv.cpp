@@ -7,8 +7,6 @@
  *
  ******************************************************************************/
 
-#include <string>
-
 #include <qapplication.h>
 
 #include "version.h"
@@ -32,8 +30,6 @@ void version();
 int main(int argc, char *argv[])
 {
     char *file_names[MAX_FILES];
-
-    int i;
 
     int i_file;
     int n_files;
@@ -64,10 +60,10 @@ int main(int argc, char *argv[])
     window_width  = 850;
     window_height = 400;
 
-    for (i = 0; i < MAX_FILES; ++i)
+    for (int i = 0; i < MAX_FILES; ++i)
         assume_sds[i] = 0;
 
-    for (i = 1; i < argc; ++i) {
+    for (int i = 1; i < argc; ++i) {
         if (argv[i][0] == '-') {
             if (strcmp(argv[i], "--expand_all") == 0) {
                 expand_all   = 1;
@@ -156,7 +152,7 @@ int main(int argc, char *argv[])
     main_window = new XDFMainWindow();
     main_window->resize(window_width, window_height);
 
-    for (i = 0; i < n_files; ++i) {
+    for (int i = 0; i < n_files; ++i) {
         try {
             if (file_types[i] == XDFV::Unknown)
                 main_window->openFile(file_names[i], assume_sds[i]);

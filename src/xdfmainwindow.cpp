@@ -447,11 +447,9 @@ void XDFMainWindow::reloadFile(XDFTreeView *view)
 
 void XDFMainWindow::reloadFile(const QString &file_name)
 {
-    int i;
-
     XDFTreeView *view;
 
-    for (i = 0; i < tabTreeView()->count(); ++i) {
+    for (int i = 0; i < tabTreeView()->count(); ++i) {
          view = (XDFTreeView *) (tabTreeView()->widget(i));
          if (file_name == QString(view->filename()))
              reloadFile(view);

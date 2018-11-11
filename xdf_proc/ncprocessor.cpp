@@ -102,7 +102,7 @@ int NCProcessor::procNCFile(const char *file_name, const char *path, const void 
      *
      *------------------------------------------------------------------------*/
     item = NULL;
-    for (i = 0; i < n_vars; ++i) {
+    for (int i = 0; i < n_vars; ++i) {
         if (processVarID(parent, &item, i, path_nodes, 0) < 0) {
             fprintf(stderr, "ERROR: processVarID(), file_name = %s\n", file_name);
             return -1;
@@ -139,12 +139,10 @@ int NCProcessor::procNCFile(const char *file_name, const char *path, const void 
 int NCProcessor::processDims(const void *parent, int var_id, int n_dims,
                              const int *dim_ids, int flags)
 {
-    int i;
-
     void *item;
 
     item = NULL;
-    for (i = 0; i < n_dims; ++i) {
+    for (int i = 0; i < n_dims; ++i) {
         item = functionDim(parent, item, dim_ids[i], &flags);
         if (item == NULL) {
             fprintf(stderr, "ERROR: functionDim()\n");
@@ -159,12 +157,10 @@ int NCProcessor::processDims(const void *parent, int var_id, int n_dims,
 
 int NCProcessor::processAttrs(const void *parent, int id, int num_attrs, int flags)
 {
-     int i;
-
      void *item;
 
      item = NULL;
-     for (i = 0; i < num_attrs; ++i) {
+     for (int i = 0; i < num_attrs; ++i) {
           item = functionAttrs(parent, item, id, i, &flags);
           if (item == NULL) {
                fprintf(stderr, "ERROR: functionAttrs()\n");

@@ -49,8 +49,6 @@ QTableWidget *XDFTableView::tableWidget()
 
 void XDFTableView::buildWidget(const char *name, int n)
 {
-    int i;
-
     const char *temp;
 
     QVBoxLayout *verticalLayout;
@@ -72,7 +70,7 @@ void XDFTableView::buildWidget(const char *name, int n)
     horizontalSpacer1 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     horizontalLayout->addItem(horizontalSpacer1);
 
-    for (i = 0; i < n; ++i) {
+    for (int i = 0; i < n; ++i) {
         if (i < n - 2)
             temp = "0";
         else
@@ -253,21 +251,19 @@ void XDFTableView::refreshTable()
 
 void XDFTableView::configureTable(int i_row, int n_rows, int i_col, int n_cols)
 {
-    int i;
-
     tableWidget()->setRowCount(n_rows);
     tableWidget()->setColumnCount(n_cols);
 
     QStringList v_labels;
-    for (i = 0; i < n_rows; ++i)
+    for (int i = 0; i < n_rows; ++i)
         v_labels << QString("%1").arg(i_row + i);
     tableWidget()->setVerticalHeaderLabels(v_labels);
 
     QStringList h_labels;
-    for (i = 0; i < n_cols; ++i)
+    for (int i = 0; i < n_cols; ++i)
         h_labels << QString("%1").arg(i_col + i);
     tableWidget()->setHorizontalHeaderLabels(h_labels);
 
-    for (i = 0; i < n_cols; ++i)
+    for (int i = 0; i < n_cols; ++i)
         tableWidget()->setColumnWidth(i, columnWidth());
 }

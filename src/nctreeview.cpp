@@ -181,7 +181,6 @@ void *NCTreeView::functionAttrs(const void *parent, const void *after,
 
     char att_name[MAX_NC_NAME];
 
-    int i;
     int n;
 
     int status;
@@ -240,7 +239,7 @@ void *NCTreeView::functionAttrs(const void *parent, const void *after,
         return NULL;
     }
     if (xtype == NC_CHAR) {
-        for (i = 0; i < n; ++i) {
+        for (int i = 0; i < n; ++i) {
             if (temp[i] == '\n')
                 temp[i] = '\\';
         }
@@ -318,8 +317,7 @@ void *NCTreeView::functionVarID(const void *parent, const void *after,
     item->setText(FIELD_Data_Type, netcdf_data_type_name(xtype));
 
     n = 0;
-
-    for (i = 0; i < n_dims; ++i) {
+    for (int i = 0; i < n_dims; ++i) {
         status = nc_inq_dimlen(nc_id, dim_ids[i], &dimlen[i]);
         if (status != NC_NOERR) {
             fprintf(stderr, "ERROR: nc_inq_dimlen(), %s\n", nc_strerror(status));
@@ -345,7 +343,7 @@ void *NCTreeView::functionVarID(const void *parent, const void *after,
         n += snprintf(temp+n, LN - n, "Contiguous");
     else if (storage == NC_CHUNKED) {
         n += snprintf(temp+n, LN - n, "Chunked");
-        for (i = 0; i < n_dims; ++i)
+        for (int i = 0; i < n_dims; ++i)
             n += snprintf(temp+n, LN - n, ", %ld", chunksizesp[i]);
     }
     else {
@@ -403,7 +401,7 @@ void *NCTreeView::functionVarID(const void *parent, const void *after,
         return NULL;
     }
     if (xtype == NC_CHAR) {
-        for (i = 0; i < n; ++i) {
+        for (int i = 0; i < n; ++i) {
             if (temp[i] == '\n')
                 temp[i] = '\\';
         }

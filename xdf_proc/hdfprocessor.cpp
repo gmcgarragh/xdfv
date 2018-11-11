@@ -118,7 +118,7 @@ int HDFProcessor::procHDFFile(const char *file_name, const char *path,
      *------------------------------------------------------------------------*/
     if (sds) {
         item = NULL;
-        for (i = 0; i < num_datasets; ++i) {
+        for (int i = 0; i < num_datasets; ++i) {
             if (processSDIndex(parent, &item, i, path_nodes, 0) < 0) {
                 fprintf(stderr, "ERROR: processSDIndex(), file_name = %s\n", file_name);
                 return -1;
@@ -145,7 +145,7 @@ int HDFProcessor::procHDFFile(const char *file_name, const char *path,
         }
 
         item = NULL;
-        for (i = 0; i < n_refs - 1; ++i) {
+        for (int i = 0; i < n_refs - 1; ++i) {
             if (processVRef(parent, &item, refs[i], path_nodes, 0) < 0) {
                 fprintf(stderr, "ERROR: processVRef(), file_name = %s\n", file_name);
                 return -1;
@@ -179,7 +179,7 @@ int HDFProcessor::procHDFFile(const char *file_name, const char *path,
     }
 
     item = NULL;
-    for (i = 0; i < n_refs - 0; ++i) {
+    for (int i = 0; i < n_refs - 0; ++i) {
 /*
         if (processVSRef(parent, &item, refs[i], path_nodes, 0)) {
             fprintf(stderr, "ERROR: processVSRef(), file_name = %s\n", file_name);
@@ -229,8 +229,6 @@ int HDFProcessor::procHDFFile(const char *file_name, const char *path,
 int HDFProcessor::processV(const void *parent, void **after,
                            int32 vgroup_id, char **path, int32 flags)
 {
-    int32 i;
-
     int32 n_pairs;
 
     int32 vgroup_tag;
@@ -242,7 +240,7 @@ int HDFProcessor::processV(const void *parent, void **after,
         return -1;
     }
 
-    for (i = 0; i < n_pairs; ++i) {
+    for (int i = 0; i < n_pairs; ++i) {
         if (Vgettagref(vgroup_id, i, &vgroup_tag, &vgroup_ref) == FAIL) {
             fprintf(stderr, "ERROR: Vgettagref()\n");
             return -1;
@@ -280,14 +278,12 @@ int HDFProcessor::processV(const void *parent, void **after,
 int HDFProcessor::processSDDims(const void *parent, int32 sds_id, int rank,
                                 int32 flags)
 {
-    int i;
-
     int32 dim_id;
 
     void *item;
 
     item = NULL;
-    for (i = 0; i < rank; ++i) {
+    for (int i = 0; i < rank; ++i) {
         dim_id = SDgetdimid(sds_id, i);
         if (dim_id == FAIL) {
             fprintf(stderr, "ERROR: SDgetdimid()\n");
@@ -311,12 +307,10 @@ int HDFProcessor::processSDDims(const void *parent, int32 sds_id, int rank,
 int HDFProcessor::processSDAttrs(const void *parent, int32 id, int num_attrs,
                                  int32 flags)
 {
-    int i;
-
     void *item;
 
     item = NULL;
-    for (i = 0; i < num_attrs; ++i) {
+    for (int i = 0; i < num_attrs; ++i) {
         item = functionSDAttrs(parent, item, id, i, &flags);
         if (item == NULL) {
 /*

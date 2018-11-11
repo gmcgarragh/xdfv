@@ -77,8 +77,6 @@ int HDFTableView::parseSlice(int32 n_dims, const int32 *dims,
                              int *i_row, int *n_rows, int *i_col, int *n_cols,
                              int32 *offset, int32 *count, int32 *length)
 {
-    int i;
-
     int r = 0;
 
     size_t *dims_   = (size_t *) malloc(n_dims * sizeof(size_t));
@@ -86,12 +84,12 @@ int HDFTableView::parseSlice(int32 n_dims, const int32 *dims,
     size_t *count_  = (size_t *) malloc(n_dims * sizeof(size_t));
     size_t length_;
 
-    for (i = 0; i < n_dims; ++i)
+    for (int i = 0; i < n_dims; ++i)
         dims_[i] = dims[i];
 
     if (! XDFTableView::parseSlice(n_dims, dims_, i_row, n_rows, i_col, n_cols,
                                    offset_, count_, &length_)) {
-        for (i = 0; i < n_dims; ++i) {
+        for (int i = 0; i < n_dims; ++i) {
             offset[i] = offset_[i];
             count [i] = count_ [i];
         }
@@ -113,9 +111,6 @@ int HDFTableView::parseSlice(int32 n_dims, const int32 *dims,
 void HDFTableView::refreshTable()
 {
     char *temp;
-
-    int i;
-    int j;
 
     int data_size;
 
@@ -187,8 +182,8 @@ void HDFTableView::refreshTable()
 
         configureTable(i_row, n_rows, i_col, n_cols);
 
-        for (i = 0; i < n_rows; ++i) {
-            for (j = 0; j < n_cols; ++j) {
+        for (int i = 0; i < n_rows; ++i) {
+            for (int j = 0; j < n_cols; ++j) {
                 ptr = ((char *) data) + (i * n_cols + j) * data_size;
                 hdf_scaler_to_string(data_type, ptr, 0, temp, LN);
                 tableWidget()->setItem(i, j, new QTableWidgetItem(temp));

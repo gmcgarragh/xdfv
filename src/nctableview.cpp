@@ -76,9 +76,6 @@ NCTableView::~NCTableView()
 
 void NCTableView::refreshTable()
 {
-    int i;
-    int j;
-
     int i_row;
     int n_rows;
     int i_col;
@@ -133,7 +130,7 @@ void NCTableView::refreshTable()
         exit(1);
     }
 
-    for (i = 0; i < n_dims; ++i) {
+    for (int i = 0; i < n_dims; ++i) {
         status = nc_inq_dimlen(nc_id, dim_ids[i], &dimlen[i]);
         if (status != NC_NOERR) {
             fprintf(stderr, "ERROR: nc_inq_dimlen(), %s\n", nc_strerror(status));
@@ -162,8 +159,8 @@ void NCTableView::refreshTable()
 
         configureTable(i_row, n_rows, i_col, n_cols);
 
-        for (i = 0; i < n_rows; ++i) {
-            for (j = 0; j < n_cols; ++j) {
+        for (int i = 0; i < n_rows; ++i) {
+            for (int j = 0; j < n_cols; ++j) {
                 ptr = ((char *) data) + (i * n_cols + j) * data_size;
                 netcdf_scaler_to_string(xtype, ptr, 0, temp, LN);
                 tableWidget()->setItem(i, j, new QTableWidgetItem(temp));

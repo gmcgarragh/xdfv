@@ -92,9 +92,7 @@ void XDFTabTreeView::expandAll()
 
 void XDFTabTreeView::expandAllTabs()
 {
-    int i;
-
-    for (i = 0; i < count(); ++i)
+    for (int i = 0; i < count(); ++i)
         ((XDFTreeView *) widget(i))->expandAll();
 }
 
@@ -110,9 +108,7 @@ void XDFTabTreeView::collapseAll()
 
 void XDFTabTreeView::collapseAllTabs()
 {
-    int i;
-
-    for (i = 0; i < count(); ++i)
+    for (int i = 0; i < count(); ++i)
         ((XDFTreeView *) widget(i))->collapseAll();
 }
 
@@ -143,11 +139,9 @@ void XDFTabTreeView::closeCurrentTab(int index)
 
 void XDFTabTreeView::setFontSize(int size)
 {
-    int i;
-
     font_size = size;
 
-    for (i = 0; i < count(); ++i)
+    for (int i = 0; i < count(); ++i)
         ((XDFTreeView *) widget(i))->setFontSize(size);
 }
 
@@ -162,11 +156,9 @@ int XDFTabTreeView::fontSize()
 
 void XDFTabTreeView::changeFontSize(int delta)
 {
-    int i;
-
     font_size += delta;
 
-    for (i = 0; i < count(); ++i)
+    for (int i = 0; i < count(); ++i)
         ((XDFTreeView *) widget(i))->changeFontSize(delta);
 }
 
@@ -216,14 +208,12 @@ bool XDFTabTreeView::isColorized()
 
 void XDFTabTreeView::setColorized(bool colorize)
 {
-    int i;
-
     if (colorize == is_colorized)
         return;
 
     is_colorized = colorize;
 
-    for (i = 0; i < count(); ++i)
+    for (int i = 0; i < count(); ++i)
         ((XDFTreeView *) widget(i))->colorizeAll(colorize);
 
     emit(colorizedChanged(colorize));

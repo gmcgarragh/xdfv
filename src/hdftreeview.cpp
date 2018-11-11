@@ -212,7 +212,6 @@ void *HDFTreeView::functionSDAttrs(const void *parent, const void *after,
 
     char attr_name[MAX_NC_NAME];
 
-    int32 i;
     int32 n;
 
     int32 data_type;
@@ -260,7 +259,7 @@ void *HDFTreeView::functionSDAttrs(const void *parent, const void *after,
         return NULL;
     }
     if (data_type == DFNT_CHAR8 || data_type == DFNT_UCHAR8) {
-        for (i = 0; i < n; ++i) {
+        for (int i = 0; i < n; ++i) {
             if (temp[i] == '\n')
                 temp[i] = '\\';
         }
@@ -465,7 +464,7 @@ void *HDFTreeView::functionSDIndex(const void *parent, const void *after,
         return NULL;
     }
     if (data_type == DFNT_CHAR8 || data_type == DFNT_UCHAR8) {
-        for (i = 0; i < n; ++i) {
+        for (int i = 0; i < n; ++i) {
             if (temp[i] == '\n')
                 temp[i] = '\\';
         }
@@ -487,8 +486,6 @@ void *HDFTreeView::functionVRef(const void *parent, const void *after, void **af
     char vgroup_name[VGNAMELENMAX];
 
     char attr_name[MAX_NC_NAME];
-
-    int32 i;
 
     int32 num_attrs;
 
@@ -517,7 +514,7 @@ void *HDFTreeView::functionVRef(const void *parent, const void *after, void **af
     }
 
     item2 = NULL;
-    for (i = 0; i < num_attrs; ++i) {
+    for (int i = 0; i < num_attrs; ++i) {
         if (Vattrinfo(vgroup_id, i, attr_name, &data_type, &count, &length) == FAIL) {
             fprintf(stderr, "ERROR: Vattrinfo(), vgroup_name = %s\n", vgroup_name);
             return NULL;
@@ -547,8 +544,6 @@ void *HDFTreeView::functionVSRef(const void *parent, const void *after,
 
     char field_name_list[VSFIELDMAX * (FIELDNAMELENMAX + 1)];
 
-    int32 i;
-    int32 j;
     int32 n;
 
     int32 n_fields;
@@ -600,7 +595,7 @@ void *HDFTreeView::functionVSRef(const void *parent, const void *after,
     }
 
     item2 = NULL;
-    for (i = 0; i < num_attrs; ++i) {
+    for (int i = 0; i < num_attrs; ++i) {
         if (VSattrinfo(vdata_id, -1, i, attr_name, &data_type, &count, &length) == FAIL) {
             fprintf(stderr, "ERROR: VSattrinfo(), vdata_name = %s\n", vdata_name);
             return NULL;
@@ -635,7 +630,7 @@ void *HDFTreeView::functionVSRef(const void *parent, const void *after,
             return NULL;
         }
         if (data_type == DFNT_CHAR8 || data_type == DFNT_UCHAR8) {
-            for (j = 0; j < n; ++j) {
+            for (int j = 0; j < n; ++j) {
                 if (temp[j] == '\n') {
                     temp[j] = '\\';
                 }

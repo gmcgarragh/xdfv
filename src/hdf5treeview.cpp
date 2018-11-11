@@ -212,7 +212,7 @@ void *HDF5TreeView::functionH5A(const void *parent, const void *after,
         item->setText(FIELD_Dimensions, "Scalar");
     else {
         n = 0;
-        for (i = 0; i < n_dims; ++i) {
+        for (int i = 0; i < n_dims; ++i) {
             n += snprintf(temp+n, LN - n, "%ld", (long) dims[i]);
             if (i < n_dims - 1)
                 n += snprintf(temp+n, LN - n, ", ");
@@ -374,7 +374,7 @@ void *HDF5TreeView::functionH5D(const void *parent, const void *after,
         item->setText(FIELD_Dimensions, "Scalar");
     else {
         n = 0;
-        for (i = 0; i < n_dims; ++i) {
+        for (int i = 0; i < n_dims; ++i) {
             n += snprintf(temp+n, LN - n, "%ld", (long) dims[i]);
             if (i < n_dims - 1)
                 n += snprintf(temp+n, LN - n, ", ");
@@ -383,7 +383,7 @@ void *HDF5TreeView::functionH5D(const void *parent, const void *after,
     }
 
     flag = 0;
-    for (i = 0; i < n_dims; ++i) {
+    for (int i = 0; i < n_dims; ++i) {
         if (dims[i] == 0) {
             flag = 1;
             break;
