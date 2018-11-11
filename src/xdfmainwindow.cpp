@@ -416,7 +416,15 @@ void XDFMainWindow::reloadCurrentFile()
 {
     XDFTreeView *view = (XDFTreeView *) (tabTreeView()->currentWidget());
     view->clear();
-    view->load();
+    try {
+        view->load();
+    }
+    catch (int e) {
+        if (e == XDFProcessor::FileNotFound)
+            throw FileNotFound;
+        else if (e == XDFProcessor::UnableToOpenFile)
+            throw UnableToOpenFile;
+    }
     if (tabTreeView()->getDefaultExpanded())
         view->expandAll();
     view->colorizeAll(tabTreeView()->isColorized());
