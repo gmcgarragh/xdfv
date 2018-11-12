@@ -24,7 +24,7 @@ XDFTabTreeView::XDFTabTreeView(QWidget *parent)
 
     font_size = default_font_size;
 
-    QObject::connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(closeCurrentTab(int)));
+    QObject::connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 }
 
 
@@ -122,19 +122,33 @@ void XDFTabTreeView::showDataTable()
 
 
 
+void XDFTabTreeView::changeToNextTab()
+{
+    setCurrentIndex(currentIndex() + 1);
+}
+
+
+
+void XDFTabTreeView::changeToPreviousTab()
+{
+    setCurrentIndex(currentIndex() - 1);
+
+}
+
+
+
+void XDFTabTreeView::closeTab(int index)
+{
+        removeTab(index);
+}
+
+
+
 void XDFTabTreeView::closeCurrentTab()
 {
     if (count() > 0)
-        closeCurrentTab(indexOf(currentWidget()));
+        removeTab(indexOf(currentWidget()));
 }
-
-
-
-void XDFTabTreeView::closeCurrentTab(int index)
-{
-    removeTab(index);
-}
-
 
 
 void XDFTabTreeView::setFontSize(int size)

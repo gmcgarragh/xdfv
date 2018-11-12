@@ -57,6 +57,8 @@ XDFMainWindow::XDFMainWindow(QWidget *parent)
     QAction *split_horizontally_action;
     QAction *split_vertically_action;
 */
+    QAction *view_next_tab_action;
+    QAction *view_previous_tab_action;
     QAction *close_current_tab_action;
 
     QMenu *preferences_menu;
@@ -152,6 +154,12 @@ XDFMainWindow::XDFMainWindow(QWidget *parent)
 
     view_menu->addSeparator();
 
+    view_next_tab_action = view_menu->addAction("Next tab");
+    view_next_tab_action->setShortcut(QKeySequence("Ctrl+PgUp"));
+
+    view_previous_tab_action = view_menu->addAction("Previous tab");
+    view_previous_tab_action->setShortcut(QKeySequence("Ctrl+PgDown"));
+
     close_current_tab_action = view_menu->addAction("Close current tab");
     close_current_tab_action->setShortcut(QKeySequence("Ctrl+t"));
 
@@ -245,6 +253,8 @@ XDFMainWindow::XDFMainWindow(QWidget *parent)
     QObject::connect(collapse_all_action,       SIGNAL(triggered()),   tab_tree_view, SLOT(collapseAll()));
     QObject::connect(collapse_all_tabs_action,  SIGNAL(triggered()),   tab_tree_view, SLOT(collapseAllTabs()));
     QObject::connect(view_current_data_action,  SIGNAL(triggered()),   tab_tree_view, SLOT(showDataTable()));
+    QObject::connect(view_next_tab_action,      SIGNAL(triggered()),   tab_tree_view, SLOT(changeToNextTab()));
+    QObject::connect(view_previous_tab_action,  SIGNAL(triggered()),   tab_tree_view, SLOT(changeToPreviousTab()));
     QObject::connect(close_current_tab_action,  SIGNAL(triggered()),   tab_tree_view, SLOT(closeCurrentTab()));
 
     QObject::connect(increase_font_size_action, SIGNAL(triggered()),   tab_tree_view, SLOT(increaseFontSize()));

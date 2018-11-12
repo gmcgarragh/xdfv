@@ -54,8 +54,10 @@ public slots:
 
     void showDataTable();
 
+    void changeToNextTab();
+    void changeToPreviousTab();
+    void closeTab(int index);
     void closeCurrentTab();
-    void closeCurrentTab(int index);
 
     void setDefaultFontSize(int size);
     void useDefaultFontSize();
