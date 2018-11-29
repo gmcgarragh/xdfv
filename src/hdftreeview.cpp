@@ -564,10 +564,15 @@ void *HDFTreeView::functionVSRef(const void *parent, const void *after,
 
     temp = (char *) malloc(LN * sizeof(char));
 
-    n_fields = VSinquire(vdata_id, &n_records, &interlace_mode,
-                     field_name_list, &vdata_size, vdata_name);
-    if (n_fields == FAIL) {
+    if (VSinquire(vdata_id, &n_records, &interlace_mode,
+                  field_name_list, &vdata_size, vdata_name) == FAIL) {
         fprintf(stderr, "ERROR: VSinquire()\n");
+        return NULL;
+    }
+
+    n_fields = VSgetfields(vdata_id, temp);
+    if (n_fields == FAIL) {
+        fprintf(stderr, "ERROR: VSgetfields(), vdata_name = %s\n", vdata_name);
         return NULL;
     }
 
@@ -584,7 +589,8 @@ void *HDFTreeView::functionVSRef(const void *parent, const void *after,
     }
     item->setText(FIELD_Data_Type, hdf_data_type_name(data_type));
 
-    snprintf(temp, LN, "N: %ld, Size: %ld", (long) n_records, (long) vdata_size);
+    snprintf(temp, LN, "Nr: %ld, Nf: %ld, Size: %ld",
+             (long) n_records, (long) n_fields, (long) vdata_size);
     item->setText(FIELD_Dimensions, temp);
 
 
