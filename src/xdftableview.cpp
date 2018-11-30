@@ -191,11 +191,21 @@ int XDFTableView::parseSlice(int n_dims, const size_t *dims, int *i_row, int *n_
 
         *length = count[0];
     }
+    else if (n_dims == 2) {
+        if (parseRange(0, dims[0], &offset[0], &count[0]))
+            return -1;
+        if (parseRange(1, dims[1], &offset[1], &count[1]))
+            return -1;
+
+        *i_row  = offset[0];
+        *n_rows = count [0];
+
+        *i_col  = offset[1];
+        *n_cols = count [1];
+    }
     else {
         count2 = 0;
         for (i = 0; i < n_dims; ++i) {
-            offset[i] = 0;
-            count [i] = 1;
             if (parseRange(i, dims[i], &offset[i], &count[i]))
                 return -1;
             if (count[i] > 1)
@@ -230,11 +240,11 @@ int XDFTableView::parseSlice(int n_dims, const size_t *dims, int *i_row, int *n_
             if (count[i] > 1)
                 *n_rows = count [i];
         }
-
-        *length = 1;
-        for (i = 0; i < n_dims; ++i)
-            *length *= count[i];
     }
+
+    *length = 1;
+    for (i = 0; i < n_dims; ++i)
+        *length *= count[i];
 
     return 0;
 }
