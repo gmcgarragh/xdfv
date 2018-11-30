@@ -14,6 +14,7 @@
 #include <hdf.h>
 #include <mfhdf.h>
 
+#include "hdftreeview.h"
 #include "xdftableview.h"
 
 
@@ -23,14 +24,17 @@ class HDFTableView : public XDFTableView
 
 private:
     const char *file_name;
-    const char *sds_name;
+    const char *object_name;
+
+    HDFTreeViewItem::ItemType type;
 
     int parseSlice(int32 n_dims, const int32 *dims,
                    int *i_row, int *n_rows, int *i_col, int *n_cols,
                    int32 *offset, int32 *count, int32 *length);
 
 public:
-    HDFTableView(const char *file_name, const char *sds_name, QWidget *parent = 0);
+    HDFTableView(const char *file_name, const char *sds_name,
+                 HDFTreeViewItem::ItemType type, QWidget *parent = 0);
     ~HDFTableView();
 
 public slots:

@@ -33,7 +33,9 @@ protected:
     int parseSlice(int n_dims, const size_t *dims, int *i_row, int *n_rows,
                    int *i_col, int *n_cols, size_t *offset, size_t *count,
                    size_t *length);
-    void configureTable(int i_row, int n_rows, int i_col, int n_cols);
+    void configureTable(int i_row, int n_rows, int i_col, int n_cols,
+                        QStringList *v_labels = NULL,
+                        QStringList *h_labels = NULL);
 
 public:
     XDFTableView(QWidget *parent = 0);

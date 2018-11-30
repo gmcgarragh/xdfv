@@ -258,20 +258,29 @@ void XDFTableView::refreshTable()
 
 
 
-void XDFTableView::configureTable(int i_row, int n_rows, int i_col, int n_cols)
+void XDFTableView::configureTable(int i_row, int n_rows, int i_col, int n_cols,
+                                  QStringList *v_labels, QStringList *h_labels)
 {
     tableWidget()->setRowCount(n_rows);
     tableWidget()->setColumnCount(n_cols);
 
-    QStringList v_labels;
-    for (int i = 0; i < n_rows; ++i)
-        v_labels << QString("%1").arg(i_row + i);
-    tableWidget()->setVerticalHeaderLabels(v_labels);
+    if (v_labels == NULL) {
+        QStringList v_labels_;
+        for (int i = 0; i < n_rows; ++i)
+            v_labels_ << QString("%1").arg(i_row + i);
+        tableWidget()->setVerticalHeaderLabels(v_labels_);
+    }
+    else
+        tableWidget()->setVerticalHeaderLabels(*v_labels);
 
-    QStringList h_labels;
-    for (int i = 0; i < n_cols; ++i)
-        h_labels << QString("%1").arg(i_col + i);
-    tableWidget()->setHorizontalHeaderLabels(h_labels);
+    if (h_labels == NULL) {
+        QStringList h_labels_;
+        for (int i = 0; i < n_cols; ++i)
+            h_labels_ << QString("%1").arg(i_col + i);
+        tableWidget()->setHorizontalHeaderLabels(h_labels_);
+    }
+    else
+        tableWidget()->setHorizontalHeaderLabels(*h_labels);
 
     for (int i = 0; i < n_cols; ++i)
         tableWidget()->setColumnWidth(i, columnWidth());

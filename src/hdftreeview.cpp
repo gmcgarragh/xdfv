@@ -548,7 +548,7 @@ void *HDFTreeView::functionVSRef(const void *parent, const void *after,
 
     int32 n_fields;
     int32 n_records;
-    int32 interlace_mode;
+    int32 n_records2;
     int32 vdata_size;
 
     int32 num_attrs;
@@ -564,13 +564,13 @@ void *HDFTreeView::functionVSRef(const void *parent, const void *after,
 
     temp = (char *) malloc(LN * sizeof(char));
 
-    if (VSinquire(vdata_id, &n_records, &interlace_mode,
-                  field_name_list, &vdata_size, vdata_name) == FAIL) {
+    if (VSinquire(vdata_id, &n_records, NULL, NULL, &vdata_size,
+                  vdata_name) == FAIL) {
         fprintf(stderr, "ERROR: VSinquire()\n");
         return NULL;
     }
 
-    n_fields = VSgetfields(vdata_id, temp);
+    n_fields = VSgetfields(vdata_id, field_name_list);
     if (n_fields == FAIL) {
         fprintf(stderr, "ERROR: VSgetfields(), vdata_name = %s\n", vdata_name);
         return NULL;
@@ -578,6 +578,7 @@ void *HDFTreeView::functionVSRef(const void *parent, const void *after,
 
     item = new HDFTreeViewItem((HDFTreeViewItem *) parent, (HDFTreeViewItem *) after,
                                HDFTreeViewItem::VData, vdata_name);
+    item->setHasDataTable(true);
 
     item->setText(FIELD_Name, vdata_name);
     item->setText(FIELD_Description, "VS");
@@ -593,6 +594,40 @@ void *HDFTreeView::functionVSRef(const void *parent, const void *after,
              (long) n_records, (long) n_fields, (long) vdata_size);
     item->setText(FIELD_Dimensions, temp);
 
+    length = n_records * n_fields * vdata_size;
+
+    data = malloc(length);
+    if (data == NULL) {
+        fprintf(stderr, "ERROR: Memory allocation failed, sds_name = %s\n", vdata_name);
+        return NULL;
+    }
+
+    n_records2 = VSread(vdata_id, (uint8 *) data, n_records, FULL_INTERLACE);
+    if (n_records2 < n_records) {
+        fprintf(stderr, "ERROR: VSread(), vdata_name = %s\n", vdata_name);
+        return NULL;
+    }
+/*
+    if (VSfpack(vdata_id, _HDF_VSUNPACK, NULL, data, length, n_records, NULL, bufptrs) == FAIL) {
+        fprintf(stderr, "ERROR: VSread(), vdata_name = %s\n", vdata_name);
+        return NULL;
+    }
+*/
+    n = hdf_array_to_string(data_type, data, n_fields, temp, LN);
+    if (n < 0) {
+        fprintf(stderr, "ERROR: hdf_array_to_string(), sds_name = %s\n", vdata_name);
+        return NULL;
+    }
+    if (data_type == DFNT_CHAR8 || data_type == DFNT_UCHAR8) {
+        for (int i = 0; i < n; ++i) {
+            if (temp[i] == '\n')
+                temp[i] = '\\';
+        }
+    }
+
+    item->setText(FIELD_Value, temp);
+
+    free(data);
 
     num_attrs = VSnattrs(vdata_id);
     if (num_attrs == FAIL) {
@@ -698,10 +733,11 @@ void HDFTreeView::showDataTable()
 
 void HDFTreeView::showDataTable(HDFTreeViewItem *item, int column)
 {
-    if (item->type() != HDFTreeViewItem::Dataset)
+    if (item->type() != HDFTreeViewItem::Dataset &&
+        item->type() != HDFTreeViewItem::VData)
         return;
 
-    HDFTableView *t = new HDFTableView(filename(), item->name, 0);
+    HDFTableView *t = new HDFTableView(filename(), item->name, item->type(), 0);
 
     t->setAttribute(Qt::WA_QuitOnClose, false);
     t->setAttribute(Qt::WA_DeleteOnClose, true);
