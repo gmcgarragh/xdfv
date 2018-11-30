@@ -233,8 +233,7 @@ int XDFTableView::parseSlice(int n_dims, const size_t *dims, int *i_row, int *n_
 
         *length = 1;
         for (i = 0; i < n_dims; ++i)
-            if (count[i] > 1)
-                *length *= dims[i];
+            *length *= count[i];
     }
 
     return 0;
