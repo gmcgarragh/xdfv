@@ -40,6 +40,8 @@ signals:
     void colorizedChanged(bool);
 
 public slots:
+    void showContextMenu(const QPoint &point);
+
     void copyItemName();
 
     void find(QString &name);

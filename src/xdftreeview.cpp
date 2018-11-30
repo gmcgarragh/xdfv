@@ -96,6 +96,26 @@ void XDFTreeView::load()
 
 
 
+void XDFTreeView::showContextMenu(const QPoint &point)
+{
+    QMenu menu(this);
+
+    QAction *copy_item_name_action = new QAction("Copy item name", this);
+    connect(copy_item_name_action, SIGNAL(triggered()), this, SLOT(copyItemName()));
+    menu.addAction(copy_item_name_action);
+
+    menu.addSeparator();
+
+    QAction *view_data_table_action = new QAction("View data table", this);
+    view_data_table_action->setEnabled(((XDFTreeViewItem *) currentItem())->hasDataTable());
+    connect(view_data_table_action, SIGNAL(triggered()), this, SLOT(showDataTable()));
+    menu.addAction(view_data_table_action);
+
+    menu.exec(mapToGlobal(point));
+}
+
+
+
 void XDFTreeView::copyItemName()
 {
     copyItemName((XDFTreeViewItem *) currentItem(), 0);
@@ -193,27 +213,6 @@ void XDFTreeView::collapseAll()
         collapseItem(*it);
         ++it;
     }
-}
-
-
-
-void XDFTreeView::prepareMenu(const QPoint &pos)
-{
-    QMenu menu(this);
-
-    QAction *copy_item_name_action = new QAction("Copy item name", this);
-    connect(copy_item_name_action, SIGNAL(triggered()), this, SLOT(copyItemName()));
-    menu.addAction(copy_item_name_action);
-
-    menu.addSeparator();
-
-    QAction *view_data_table_action = new QAction("View data table", this);
-    view_data_table_action->setEnabled(((XDFTreeViewItem *) currentItem())->hasDataTable());
-    connect(view_data_table_action, SIGNAL(triggered()), this, SLOT(showDataTable()));
-    menu.addAction(view_data_table_action);
-
-    QPoint pt(pos);
-    menu.exec(mapToGlobal(pos));
 }
 
 

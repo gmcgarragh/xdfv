@@ -7,6 +7,8 @@
  *
  ******************************************************************************/
 
+#include <qmenu.h>
+
 #include "xdfv.h"
 #include "xdftabtreeview.h"
 #include "xdftreeview.h"
@@ -25,6 +27,9 @@ XDFTabTreeView::XDFTabTreeView(QWidget *parent)
     font_size = default_font_size;
 
     QObject::connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
+
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    QObject::connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(showContextMenu(const QPoint &)));
 }
 
 
@@ -32,6 +37,26 @@ XDFTabTreeView::XDFTabTreeView(QWidget *parent)
 XDFTabTreeView::~XDFTabTreeView()
 {
 
+}
+
+
+void XDFTabTreeView::showContextMenu(const QPoint &point)
+{
+    QMenu menu(this);
+
+    int index = tabBar()->tabAt(point);
+
+    if (index == currentIndex()) {
+        QAction *expand_all_action = new QAction("Expand all", this);
+        connect(expand_all_action, SIGNAL(triggered()), this, SLOT(expandAll()));
+        menu.addAction(expand_all_action);
+
+        QAction *collapse_all_action = new QAction("Collapse all", this);
+        connect(collapse_all_action, SIGNAL(triggered()), this, SLOT(collapseAll()));
+        menu.addAction(collapse_all_action);
+    }
+
+    menu.exec(mapToGlobal(point));
 }
 
 

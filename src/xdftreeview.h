@@ -44,6 +44,8 @@ public:
     virtual void load();
 
 public slots:
+    void showContextMenu(const QPoint &point);
+
     void copyItemName();
     void copyItemName(XDFTreeViewItem *item, int column);
 
@@ -55,7 +57,6 @@ public slots:
     void collapseAll();
     void colorizeAll(bool color);
 
-    void prepareMenu(const QPoint &pos);
     virtual void showDataTable();
     virtual void showDataTable(XDFTreeViewItem *item, int column);
 
