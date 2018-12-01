@@ -219,7 +219,8 @@ void XDFTreeView::collapseAll()
 
 void XDFTreeView::showDataTable()
 {
-    showDataTable((XDFTreeViewItem *) currentItem(), 0);
+    if (currentItem() != NULL)
+        showDataTable((XDFTreeViewItem *) currentItem(), 0);
 }
 
 

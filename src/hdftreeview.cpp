@@ -733,6 +733,9 @@ void HDFTreeView::showDataTable()
 
 void HDFTreeView::showDataTable(HDFTreeViewItem *item, int column)
 {
+    if (item == NULL)
+        return;
+
     if (item->type() != HDFTreeViewItem::Dataset &&
         item->type() != HDFTreeViewItem::VData)
         return;

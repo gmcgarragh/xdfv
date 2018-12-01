@@ -523,6 +523,9 @@ void HDF5TreeView::showDataTable()
 
 void HDF5TreeView::showDataTable(HDF5TreeViewItem *item, int column)
 {
+    if (item == NULL)
+        return;
+
     if (item->type() != HDF5TreeViewItem::Dataset)
         return;
 

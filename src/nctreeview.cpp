@@ -454,6 +454,9 @@ void NCTreeView::showDataTable()
 
 void NCTreeView::showDataTable(NCTreeViewItem *item, int column)
 {
+    if (item == NULL)
+        return;
+
     if (item->type() != NCTreeViewItem::Variable)
         return;
 
