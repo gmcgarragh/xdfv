@@ -63,7 +63,7 @@ XDFTreeView::XDFTreeView(const char *file_name_, XDFV::FileType file_type, QWidg
     setRootIsDecorated(true);
     setSortingEnabled(false);
     setContextMenuPolicy(Qt::CustomContextMenu);
-    QObject::connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(prepareMenu(const QPoint &)));
+    QObject::connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(showContextMenu(const QPoint &)));
 }
 
 
