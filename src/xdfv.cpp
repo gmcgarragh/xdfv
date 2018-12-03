@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
                 }
             }
             else {
-                printf("ERROR: Invalid option: %s, use --help for more information\n", argv[i]);
+                fprintf(stderr, "ERROR: Invalid option: %s, use --help for more information\n", argv[i]);
                 exit(1);
             }
         }
