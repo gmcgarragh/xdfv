@@ -57,17 +57,18 @@ PRODUCTS = $(MOC_PRODUCTS) version.cpp
 
 all: $(BINARIES)
 
-../xdfv: version $(OBJECTS) ../xdf_proc/libxdf_proc.a
+../xdfv: $(OBJECTS) ../xdf_proc/libxdf_proc.a
 	$(CXX) $(CXXFLAGS) $(CXXDEFINES) -o ../xdfv $(OBJECTS) \
         $(INCDIRS) $(LIBDIRS) $(LINKS) ../xdf_proc/libxdf_proc.a
 
-version:
+version.o: version.cpp version.h
+
+# Requires UNIX/LINUX date command and git
+version.cpp:
 	echo "#include \"version.h\"" > version.cpp; \
         echo "" >> version.cpp; \
         echo "const char *build_date  = \"`date +"%F %X %z"`\";" >> version.cpp; \
         echo "const char *build_sha_1 = \"`git describe --abbrev=7 --dirty --always --tags`\";" >> version.cpp
-
-version.o: version.cpp version.h
 
 hdftableview_moc.cpp: hdftableview.h
 	${MOC} hdftableview.h -o hdftableview_moc.cpp

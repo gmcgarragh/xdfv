@@ -23,7 +23,7 @@ CXXFLAGS = -O2 -Wall -Werror -std=c++11 -fPIC
 #LIBDIRS += -L${HOME}/opt/hdf/lib
 LINKS   += -lmfhdf -ldf -ljpeg -lz
 
-# HDF 5
+# HDF5
 #INCDIRS += -I${HOME}/opt/hdf5/include
 #LIBDIRS += -L${HOME}/opt/hdf5/lib
 LINKS   += -lhdf5 -lhdf5_hl
@@ -41,12 +41,12 @@ LINKS   += -lnetcdf
 #MOC      = moc-qt4
 MOC      = moc-qt5
 
-# Qt 4
+# Qt4
 #INCDIRS += -I/usr/include/qt4 -I/usr/include/qt4/Qt
 #LIBDIRS += -L/usr/lib
 #LINKS   += -lQtCore -lQtGui
 
-# Qt 5
+# Qt5
 INCDIRS += -I/usr/include/qt5 -I/usr/include/qt5/QtCore \
            -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtWidgets
 LIBDIRS += -L/usr/lib

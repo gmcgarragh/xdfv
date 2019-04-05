@@ -4,9 +4,10 @@ gnetcdf_util.o: gnetcdf_util.c gutil.h gnetcdf.h
 hdf5tableview.o: hdf5tableview.cpp xdfv.h hdf5tableview.h xdftableview.h
 hdf5treeview.o: hdf5treeview.cpp xdfv.h hdf5tableview.h xdftableview.h \
  hdf5treeview.h xdftreeview.h
-hdftableview.o: hdftableview.cpp xdfv.h hdftableview.h xdftableview.h
-hdftreeview.o: hdftreeview.cpp xdfv.h hdftableview.h xdftableview.h \
- hdftreeview.h xdftreeview.h
+hdftableview.o: hdftableview.cpp xdfv.h hdftableview.h hdftreeview.h \
+ xdftreeview.h xdftableview.h
+hdftreeview.o: hdftreeview.cpp xdfv.h hdftableview.h hdftreeview.h \
+ xdftreeview.h xdftableview.h
 nctableview.o: nctableview.cpp xdfv.h nctableview.h xdftableview.h
 nctreeview.o: nctreeview.cpp xdfv.h nctableview.h xdftableview.h \
  nctreeview.h xdftreeview.h
