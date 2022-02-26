@@ -152,6 +152,7 @@ int HDFTableView::parseSlice(int32 n_dims, const int32 *dims,
     size_t *count_  = (size_t *) malloc(n_dims * sizeof(size_t));
     size_t length_;
 
+    dims_[0] = 0;
     for (int i = 0; i < n_dims; ++i)
         dims_[i] = dims[i];
 
