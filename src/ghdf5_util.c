@@ -107,6 +107,7 @@ int hdf5_scaler_to_string(hid_t datatype_id, H5T_class_t data_class,
                     temp[n] = '\0';
                     break;
                }
+/*
                while (n - 1 < data_size) {
                     if (H5Tis_variable_str(datatype_id))
                          temp[n] = ((char **) ptr)[i][n-1];
@@ -118,6 +119,21 @@ int hdf5_scaler_to_string(hid_t datatype_id, H5T_class_t data_class,
                          break;
                     }
                }
+*/
+               while (1) {
+                    if (H5Tis_variable_str(datatype_id))
+                         temp[n] = ((char **) ptr)[i][n-1];
+                    else
+                         temp[n] = ((char *)  ptr)   [n-1];
+                    if (temp[n] == '\0')
+                         break;
+                    n++;
+                    if (n + 1 == length) {
+                         temp[n] = '\0';
+                         break;
+                    }
+               }
+
                temp[n++] = '\'';
                if (n + 1 == length) {
                     temp[n] = '\0';
