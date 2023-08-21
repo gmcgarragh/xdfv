@@ -53,8 +53,8 @@ int main(int argc, char *argv[])
      *------------------------------------------------------------------------*/
     i_file = -1;
 
-    expand_all    = 1;
-    collapse_all  = 0;
+    expand_all    = 0;
+    collapse_all  = 1;
     font_size     = 0;
     view_in_color = 1;
     window_width  = 850;
